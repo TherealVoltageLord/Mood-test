@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mood Tracker API Tester</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .container {
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 300px;
+            text-align: center;
+        }
+        h1 {
+            margin-bottom: 20px;
+            color: #333;
+        }
+        input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+        button {
+            width: 100%;
+            padding: 10px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #218838;
+        }
+        .response {
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #f8f9fa;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            text-align: left;
+        }
+        .response h3 {
+            margin-top: 0;
+            color: #333;
+        }
+        .response p {
+            margin: 5px 0;
+            color: #555;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Mood Tracker API Tester</h1>
+        <input type="text" id="moodInput" placeholder="Enter your mood (e.g., happy, sad)">
+        <button onclick="logMood()">Get Quote</button>
+        <div id="response" class="response" style="display: none;">
+            <h3>Response:</h3>
+            <p><strong>Mood:</strong> <span id="mood"></span></p>
+            <p><strong>Quote:</strong> <span id="quote"></span></p>
+            <p><strong>Timestamp:</strong> <span id="timestamp"></span></p>
+        </div>
+    </div>
+
+    <script>
+        async function logMood() {
+            const mood = document.getElementById("moodInput").value.trim();
+            if (!mood) {
+                alert("Please enter a mood!");
+                return;
+            }
+
+            const apiUrl = "https://your-username-your-space-name.hf.space/moods"; // Replace with your API URL
+
+            try {
+                const response = await fetch(apiUrl, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({ mood })
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+
+                const data = await response.json();
+
+                // Display the response
+                document.getElementById("mood").textContent = data.mood;
+                document.getElementById("quote").textContent = data.quote;
+                document.getElementById("timestamp").textContent = data.timestamp;
+                document.getElementById("response").style.display = "block";
+            } catch (error) {
+                console.error("Error:", error);
+                alert("An error occurred. Please try again.");
+            }
+        }
+    </script>
+</body>
+</html>
